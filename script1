@@ -1,0 +1,16 @@
+--use a subquery to combine all 5 tables into 1
+select table1."Category",date_part('year',table1."OrderDate") as Year, sum(table1."Sales") as TotalSales, sum(table1."Profit") as Profit
+from (
+select p1.*, p2.*, p3.*, p4.*, p5.*
+from part1 as p1
+join part2 as p2
+on cast(p1."RowID" as INTEGER) = p2."RowID"
+join part3 as p3
+on cast(p1."RowID" as Integer) = p3."RowID"
+join part4 as p4
+on cast(p1."RowID" as Integer) = p4."RowID"
+join part5 as p5
+on cast(p1."RowID" as Integer) = p5."RowID"
+) table1
+group by table1."Category", date_part('year',table1."OrderDate")
+order by table1."Category", Year DESC

@@ -1,0 +1,23 @@
+--use a subquery to combine all 5 tables into 1
+select table1."Segment", table1."Category",date_part('year',table1."OrderDate") as Year, 
+sum(table1."Sales") as TotalSales, sum(table1."Profit") as Profit, round(sum(table1."Profit")/sum(table1."Sales"),2) as Margin,
+case when sum(table1."Sales") > 100000 then 'High'
+when sum(table1."Sales") <= 100000 then 'low' end
+as SalesRating, 
+case when round(sum(table1."Profit")/sum(table1."Sales"),2) > 0.15 then 'High'
+when round(sum(table1."Profit")/sum(table1."Sales"),2) <= 0.15 then 'Low' end
+as ProfitRating
+from (
+select p1.*, p2.*, p3.*, p4.*, p5.*
+from part1 as p1
+join part2 as p2
+on cast(p1."RowID" as INTEGER) = p2."RowID"
+join part3 as p3
+on cast(p1."RowID" as Integer) = p3."RowID"
+join part4 as p4
+on cast(p1."RowID" as Integer) = p4."RowID"
+join part5 as p5
+on cast(p1."RowID" as Integer) = p5."RowID"
+) table1
+group by 1,2,3
+order by table1."Category", Year DESC

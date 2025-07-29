@@ -1,4 +1,4 @@
-# superstoreSQLcode
+# Super Store SQL code
 SQL code to query the Super Store table as found on Tableau
 
 The link to the table can be found below,

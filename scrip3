@@ -1,0 +1,28 @@
+drop table temp_salesrep;
+
+create temporary table temp_salesrep (
+	Region VARCHAR(200),
+	Rep varchar(200)
+);
+
+insert into temp_salesrep (Region, Rep)
+values ('West', 'Anna Andreadi'), ('East', 'Chuck Magee'), ('Central', 'Kelly Williams'), ('South', 'Cassandra Brandow');
+
+select t3."rep", sum(t3."Sales") as TotalSales
+from (
+select t1.*,t2."rep"
+from (select p1.*, p2.*, p3.*, p4.*, p5.*
+from part1 as p1
+join part2 as p2
+on cast(p1."RowID" as INTEGER) = p2."RowID"
+join part3 as p3
+on cast(p1."RowID" as Integer) = p3."RowID"
+join part4 as p4
+on cast(p1."RowID" as Integer) = p4."RowID"
+join part5 as p5
+on cast(p1."RowID" as Integer) = p5."RowID") as t1
+left join temp_salesrep as t2
+on t1."Region" = t2."region"
+) t3
+group by 1
+order by TotalSales DESC
